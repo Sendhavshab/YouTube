@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTuber Finder</title>
-    <link rel="stylesheet" href="YouTube finder.css">
 </head>
 <body>
     <h1 id="main-hading">YouTuber Finder</h1>
@@ -12,19 +11,21 @@
     <div id="result-div"></div>
     
     <div id="footer">
-        <a id="contact" href="https://t.me/teachten" target="_blank">
+        <a id="contact" href="https://t.me/teachowner" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png" alt="Telegram" width="50" height="50">
         </a>
     </div>
     <div class="inputDiv">
         <input type="text" id="subjectInput" placeholder="e.g., Tech, Science, etc.">
-        <button id="search" onclick="searchYouTubers()">👁️</button>
+        <button id="search" onclick="searchYouTubers()">👁️‍🗨️</button>
+        <div id="space"></div>
     </div>
 
 <style>
     * {
         margin: 0;
         padding: 0;
+        
     }
 
     #main-hading {
@@ -51,7 +52,7 @@
 
     #contact {
         position: fixed;
-        top: 10px;
+        top: 61px;
         right: 10px;
     }
 
@@ -68,14 +69,31 @@
         gap: 5px;
         position: fixed;
         bottom:30px;
-        
     }
 
     #search {
         width: 50px;
         background: #aafff4;
         font-size: 20px;
+        border:none;
+        border-radius:10px;
     }
+
+    #copy {
+        color: white;
+        background: black;
+        border-radius: 999px;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    #space {
+        padding:10px;
+    }
+    #result-div a {
+        text-decoration: none;
+        color: rgb(52, 200, 51);
 </style>
 <script>
     function searchYouTubers() {
@@ -92,9 +110,14 @@
             .catch(error => console.error('Error fetching data:', error));
     }
 
-    function copyChannelLink(link) {
+    function copyChannelLink(link, button) {
         navigator.clipboard.writeText(link)
-            .then(() => alert('Copied'))
+            .then(() => {
+                button.innerHTML = 'Copied';
+                setTimeout(() => {
+                    button.innerHTML = 'Copy';
+                }, 2000);
+            })
             .catch(error => console.error('Error copying channel link:', error));
     }
 
@@ -120,7 +143,7 @@
                 <div>
                     <p>${channelTitle}</p>
                     <a href="${channelLink}" target="_blank">Visit Channel</a>
-                    <button onclick="copyChannelLink('${channelLink}')">Copy Channel Link</button>
+                    <button id="copy" onclick="copyChannelLink('${channelLink}', this)">Copy</button>
                 </div>
             `;
             resultsContainer.appendChild(resultElement);
