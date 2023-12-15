@@ -19,13 +19,16 @@
         <input type="text" id="subjectInput" placeholder="e.g., Tech, Science, etc.">
         <button id="search" onclick="searchYouTubers()">👁️‍🗨️</button>
         <div id="space"></div>
-    </div>
+        </div>
+        <div id="loading" style="display: none;">
+            <div class="spinner"></div> 
+        </div>
+    
 
 <style>
     * {
         margin: 0;
         padding: 0;
-        
     }
 
     #main-hading {
@@ -91,13 +94,75 @@
     #space {
         padding:10px;
     }
-    #result-div a {
-        text-decoration: none;
-        color: rgb(52, 200, 51);
+    #result-div {
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    .spinner {
+        border: 4px solid #000023f0;
+        border-top: 4px solid #2c370011;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        position:relative;
+        right:-50%;
+        top:50px;
+       
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+
+    }
 </style>
 <script>
+    function startLoading() {
+        const searchButton = document.getElementById('search');
+        const subjectInput = document.getElementById('subjectInput');
+        const loadingElement = document.getElementById('loading');
+        const resultsDiv = document.getElementById('result-div');
+
+        // Disable the search button and change input shape
+        searchButton.disabled = true;
+        
+
+        // Display loading spinner
+        loadingElement.style.display = 'flex';
+
+        // Hide results div during loading
+        resultsDiv.style.opacity = 0;
+    }
+
+    function stopLoading() {
+        const searchButton = document.getElementById('search');
+        const subjectInput = document.getElementById('subjectInput');
+        const loadingElement = document.getElementById('loading');
+        const resultsDiv = document.getElementById('result-div');
+
+        // Enable the search button and reset input shape
+        searchButton.disabled = false;
+        subjectInput.style.borderRadius = '10px';
+
+        // Hide loading spinner
+        loadingElement.style.display = 'none';
+
+        // Display results div with fade-in animation
+        resultsDiv.style.opacity = 1;
+    }
+
     function searchYouTubers() {
         const subject = document.getElementById('subjectInput').value;
+
+        startLoading();
 
         // Use YouTube API to fetch relevant data
         // Replace 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU' with your actual YouTube API key
@@ -106,8 +171,14 @@
 
         fetch(apiUrl)
             .then(response => response.json())
-            .then(data => displayResults(data.items))
-            .catch(error => console.error('Error fetching data:', error));
+            .then(data => {
+                displayResults(data.items);
+                stopLoading();
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                stopLoading();
+            });
     }
 
     function copyChannelLink(link, button) {
@@ -149,6 +220,7 @@
             resultsContainer.appendChild(resultElement);
         });
     }
+    
 </script>
 </body>
 </html>
