@@ -214,24 +214,35 @@
         function searchYouTubers() {
             const subject = document.getElementById('subjectInput').value;
 
-            startLoading();
+function searchYouTubers() {
+    const subjectInput = document.getElementById('subjectInput');
+    const subject = subjectInput.value.trim(); // Trim to remove leading/trailing spaces
 
-            // Use YouTube API to fetch relevant data
-            // Replace 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU' with your actual YouTube API key
-            const apiKey = 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU';
-            const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${subject}&type=channel&key=${apiKey}`;
+    if (subject === '') {
+        // If input is empty, do not proceed with the search
+        stopLoading();
+        return;
+    }
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    displayResults(data.items);
-                    stopLoading();
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    stopLoading();
-                });
-        }
+    startLoading();
+
+    // Use YouTube API to fetch relevant data
+    // Replace 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU' with your actual YouTube API key
+    const apiKey = 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU';
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${subject}&type=channel&key=${apiKey}`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data.items);
+            stopLoading();
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            stopLoading();
+        });
+}
+
 
         function copyChannelLink(link, button) {
             navigator.clipboard.writeText(link)
