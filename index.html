@@ -219,29 +219,21 @@ function searchYouTubers() {
     const subject = subjectInput.value.trim(); // Trim to remove leading/trailing spaces
 
     if (subject === '') {
-        
-        // If input is empty, do not proceed with the search
-        stopLoading();
+        // If input is empty, display a specific message
+        const resultsContainer = document.getElementById('result-div');
+        resultsContainer.innerHTML = `
+            <p>Please type anything or subscribe to our
+            <a href="https://youtube.com/@AnkiTools?si=tcE8uZDI5ulNoN_1" target="_blank">YouTube channel</a></p>
+        `;
         return;
     }
 
     startLoading();
 
-    // Use YouTube API to fetch relevant data
-    // Replace 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU' with your actual YouTube API key
-    const apiKey = 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU';
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${subject}&type=channel&key=${apiKey}`;
+    // Rest of your existing code for fetching and displaying results
+    // ...
+}
 
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayResults(data.items);
-            stopLoading();
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            stopLoading();
-        });
 }
 
 
