@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anki-YouTuber Finder</title>
+    <title>AnkiTools-YouTuber search</title>
 </head>
 <body>
-    <h1 id="main-heading">YouTuber Finder</h1>
+    <h1 id="main-heading">AnkiTools-YouTuber search</h1>
    
     <div id="result-div"></div>
     
@@ -275,7 +275,7 @@
                         <p>Subscribers: <span id="subscribersCount">${statistics.subscriberCount || 'N/A'}</span></p>
                         <p>Videos: <span id="videosCount">${statistics.videoCount || 'N/A'}</span></p>
                         <p>Total Views: <span id="viewsCount">${statistics.viewCount || 'N/A'}</span></p>
-                        <p>Total Likes: <span id="likesCount">N/A</span></p>
+                        
                         <button id="copy" onclick="copyChannelLink('${channelLink}', this)">Copy</button>
                     </div>
                 `;
