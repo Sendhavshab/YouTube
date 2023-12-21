@@ -188,6 +188,18 @@
         #nontipe > a {
             color:rgb(51,200,51)
         }
+       
+@media screen and (min-width: 768px) {
+    .channel-info {
+        min-width: calc(33.33% - 20px); /* Display 3 items per row, adjust as needed */
+        font-size: 16px; /* Adjust font size for larger screens */
+    }
+
+    .channel-info img {
+        max-width: 80%; /* Adjust image size for larger screens */
+    }
+}
+
     </style>
     <script>
         function startLoading() {
@@ -314,6 +326,19 @@
 
             stopLoading(); // This is a placeholder since the actual fetching is not implemented in this example
         }
+       
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        searchYouTubers();
+    }
+}
+
+
+const subjectInput = document.getElementById('subjectInput');
+subjectInput.addEventListener('keypress', handleKeyPress);
+
+
+ 
     </script>
 </body>
 </html>
