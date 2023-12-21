@@ -25,6 +25,9 @@
     </div>
 
     <style>
+     
+  @import url('https://fonts.googleapis.com/css2?family=Rubik+Doodle+Shadow&family=Rubik+Doodle+Triangles&display=swap');
+
         /* Your existing CSS styles here */
         * {
             margin: 0;
@@ -37,6 +40,7 @@
             border-radius: 4px;
             text-align: center;
             padding: 10px;
+            font-family: Rubik Doodle Shadow ,Roboto, Arial, sans-serif;
         }
 
         #subjectInput {
@@ -55,7 +59,7 @@
 
         #contact {
             position: fixed;
-            top: 61px;
+            bottom:90px;
             right: 10px;
         }
 
@@ -176,6 +180,14 @@
                 opacity: 1;
             }
         }
+        #nontipe{
+            color:#ff5e00;
+            font-weight:bold;
+            font-size:30px;
+        }
+        #nontipe > a {
+            color:rgb(51,200,51)
+        }
     </style>
     <script>
         function startLoading() {
@@ -212,9 +224,6 @@
         }
 
         function searchYouTubers() {
-            const subject = document.getElementById('subjectInput').value;
-
-function searchYouTubers() {
     const subjectInput = document.getElementById('subjectInput');
     const subject = subjectInput.value.trim(); // Trim to remove leading/trailing spaces
 
@@ -222,7 +231,7 @@ function searchYouTubers() {
         // If input is empty, display a specific message
         const resultsContainer = document.getElementById('result-div');
         resultsContainer.innerHTML = `
-            <p>Please type anything or subscribe to our
+            <p id="nontipe">Please type anything or subscribe to our
             <a href="https://youtube.com/@AnkiTools?si=tcE8uZDI5ulNoN_1" target="_blank">YouTube channel</a></p>
         `;
         return;
@@ -230,12 +239,22 @@ function searchYouTubers() {
 
     startLoading();
 
-    // Rest of your existing code for fetching and displaying results
-    // ...
-}
+    // Use YouTube API to fetch relevant data
+    // Replace 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU' with your actual YouTube API key
+    const apiKey = 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU';
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${subject}&type=channel&key=${apiKey}`;
 
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data.items);
+            stopLoading();
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            stopLoading();
+        });
 }
-
 
         function copyChannelLink(link, button) {
             navigator.clipboard.writeText(link)
@@ -248,52 +267,53 @@ function searchYouTubers() {
                 .catch(error => console.error('Error copying channel link:', error));
         }
 
- function displayResults(items) {
-    const resultsContainer = document.getElementById('result-div');
-    resultsContainer.innerHTML = ''; // Clear previous results
+        function displayResults(items) {
+            const resultsContainer = document.getElementById('result-div');
+            resultsContainer.innerHTML = ''; // Clear previous results
 
-    if (items.length === 0) {
-        resultsContainer.innerHTML = '<p>No results found.</p>';
-        return;
-    }
+            if (items.length === 0) {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+                return;
+            }
 
-    items.forEach(item => {
-        const channelTitle = item.snippet.channelTitle;
-        const channelId = item.id.channelId;
-        const channelLink = `https://www.youtube.com/channel/${channelId}`;
+            items.forEach(item => {
+                const channelTitle = item.snippet.channelTitle;
+                const channelId = item.id.channelId;
+                const channelLink = `https://www.youtube.com/channel/${channelId}`;
 
-        // Make an API call to get accurate subscriber count
-        const apiKey = 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU';
-        const subscriberApiUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`;
+                // Make an API call to get accurate subscriber count
+                const apiKey = 'AIzaSyCrMqYI-lRbUSqKnP712cOm_A7ECneBrGU';
+                const subscriberApiUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`;
 
-        fetch(subscriberApiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const statistics = data.items && data.items.length > 0 ? data.items[0].statistics : {};
+                fetch(subscriberApiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const statistics = data.items && data.items.length > 0 ? data.items[0].statistics : {};
 
-                const resultElement = document.createElement('div');
-                resultElement.innerHTML = `
-                    <img src="${item.snippet.thumbnails.default.url}" alt="${channelTitle} Thumbnail">
-                    <p>${channelTitle}</p>
-                    <div class="channel-info-details">
-                        <p>Subscribers: <span id="subscribersCount">${statistics.subscriberCount || 'N/A'}</span></p>
-                        <p>Videos: <span id="videosCount">${statistics.videoCount || 'N/A'}</span></p>
-                        <p>Total Views: <span id="viewsCount">${statistics.viewCount || 'N/A'}</span></p>
-                        
-                        <button id="copy" onclick="copyChannelLink('${channelLink}', this)">Copy</button>
-                    <a href="${channelLink}" target="_blank">Go channel</a>  
-                    </div>
-                `;
-                resultElement.className = 'channel-info';
+                        const resultElement = document.createElement('div');
+                        resultElement.innerHTML = `
+                            <img src="${item.snippet.thumbnails.default.url}" alt="${channelTitle} Thumbnail">
+                            <p>${channelTitle}</p>
+                            <div class="channel-info-details">
+                                <p>Subscribers: <span id="subscribersCount">${statistics.subscriberCount || 'N/A'}</span></p>
+                                <p>Videos: <span id="videosCount">${statistics.videoCount || 'N/A'}</span></p>
+                                <p>Total Views: <span id="viewsCount">${statistics.viewCount || 'N/A'}</span></p>
+                                
+                                <button id="copy" onclick="copyChannelLink('${channelLink}', this)">Copy</button>
+                                <a href="${channelLink}" target="_blank">Go channel</a>  
+                            </div>
+                        `;
+                        resultElement.className = 'channel-info';
 
-                resultsContainer.appendChild(resultElement);
-            })
-            .catch(error => {
-                console.error('Error fetching subscriber count:', error);
+                        resultsContainer.appendChild(resultElement);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching subscriber count:', error);
+                    });
             });
-    });
-}
 
+            stopLoading(); // This is a placeholder since the actual fetching is not implemented in this example
+        }
     </script>
 </body>
 </html>
